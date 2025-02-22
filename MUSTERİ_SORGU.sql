@@ -1,45 +1,45 @@
 USE CUSTOMERS
 SELECT *FROM CUSTOMERS WHERE  CUSTOMERNAME LIKE 'A%' and GENDER='E'
 -----------------------------------------------------------------------------------------------------------------------------------------
----1990 ve 1995 yýllarý arasýnda doðan müþterileri çekiniz.
+---1990 ve 1995 yÄ±llarÄ± arasÄ±nda doÄŸan mÃ¼ÅŸterileri Ã§ekiniz.
 SELECT *FROM CUSTOMERS WHERE YEAR(BIRHTDATE) BETWEEN 1990 AND 1995
 -----------------------------------------------------------------------------------------------------------------------------------------
---- ÝSTANBULDA yaþayan kiþileri join kullanarak getirme
+--- Ä°STANBULDA yaÅŸayan kiÅŸileri join kullanarak getirme
 SELECT *FROM CUSTOMERS CUS
-INNER JOIN CITYS C ON C.ID= CUS.CITYID WHERE C.CITY = 'ÝSTANBUL'
-----Ýstanbulda yaþayan kiþileri subquery kullanarak getiren
-SELECT *FROM CUSTOMERS WHERE CUSTOMERS.CITYID= (SELECT ID FROM CITYS WHERE CITY='ÝSTANBUL')
+INNER JOIN CITYS C ON C.ID= CUS.CITYID WHERE C.CITY = 'Ä°STANBUL'
+----Ä°stanbulda yaÅŸayan kiÅŸileri subquery kullanarak getiren
+SELECT *FROM CUSTOMERS WHERE CUSTOMERS.CITYID= (SELECT ID FROM CITYS WHERE CITY='Ä°STANBUL')
 -----------------------------------------------------------------------------------------------------------------------------------------
----Hangi þehirde kaç müþterimizin oldugu bilgisini getiren sorgu
+---Hangi ÅŸehirde kaÃ§ mÃ¼ÅŸterimizin oldugu bilgisini getiren sorgu
 SELECT  COUNT(CUS.CUSTOMERNAME),C.CITY FROM CUSTOMERS CUS INNER JOIN CITYS C 
 ON CUS.CITYID= C.ID GROUP BY C.CITY
 	---OR 
 SELECT C.CITY, (SELECT COUNT(*) FROM CUSTOMERS WHERE CITYID= C.ID) AS CUSTORMER_COUNT  FROM CITYS C
 -----------------------------------------------------------------------------------------------------------------------------------------
---- 10'dan fazla müþterimiz olan þehirleri müþteri sayýsý ile birlikte müþteri sayýsýna göre 
---fazladan aza doðru sýralý þekilde getiriniz.
-SELECT COUNT(CUS.CUSTOMERNAME) 'MÜÞTERÝ SAYISI', C.CITY FROM CUSTOMERS CUS INNER JOIN CITYS C
-ON CUS.CITYID= C.ID GROUP BY C.CITY HAVING COUNT(CUS.CUSTOMERNAME)>10  ORDER BY 'MÜÞTERÝ SAYISI' DESC
+--- 10'dan fazla mÃ¼ÅŸterimiz olan ÅŸehirleri mÃ¼ÅŸteri sayÄ±sÄ± ile birlikte mÃ¼ÅŸteri sayÄ±sÄ±na gÃ¶re 
+--fazladan aza doÄŸru sÄ±ralÄ± ÅŸekilde getiriniz.
+SELECT COUNT(CUS.CUSTOMERNAME) 'MÃœÅžTERÄ° SAYISI', C.CITY FROM CUSTOMERS CUS INNER JOIN CITYS C
+ON CUS.CITYID= C.ID GROUP BY C.CITY HAVING COUNT(CUS.CUSTOMERNAME)>10  ORDER BY 'MÃœÅžTERÄ° SAYISI' DESC
 -----------------------------------------------------------------------------------------------------------------------------------------
----Hangi þehirde kaç erkek, kaç kadýn müþterimizin olduðu bilgisini
+---Hangi ÅŸehirde kaÃ§ erkek, kaÃ§ kadÄ±n mÃ¼ÅŸterimizin olduÄŸu bilgisini
 SELECT C.CITY,CUS.GENDER,COUNT(CUS.ID) FROM CUSTOMERS CUS  INNER JOIN CITYS C 
 ON CUS.CITYID= C.ID GROUP BY C.CITY,CUS.GENDER ORDER BY C.CITY,CUS.GENDER
 
 ---OR
- SELECT CITY AS SEHIRADÝ,(SELECT COUNT(*) FROM CUSTOMERS WHERE CITYID= C.ID AND GENDER='E' ) AS ERKEKSAYÝSÝ,
-(SELECT COUNT(*) FROM CUSTOMERS WHERE CITYID=C.ID AND GENDER='K') AS KÝZSAYÝSÝ
+ SELECT CITY AS SEHIRADÄ°,(SELECT COUNT(*) FROM CUSTOMERS WHERE CITYID= C.ID AND GENDER='E' ) AS ERKEKSAYÄ°SÄ°,
+(SELECT COUNT(*) FROM CUSTOMERS WHERE CITYID=C.ID AND GENDER='K') AS KÄ°ZSAYÄ°SÄ°
  FROM  CITYS C
 -----------------------------------------------------------------------------------------------------------------------------------------
----- CUSTOMERS TABLOSUNA EKLENEN AGEGROUP alanýný 20-35 yaþ arasý, 36-45 yaþ arasý, 55-65 yaþ arasý 
---ve 65 yaþ üstü olarak güncelleyin.
+---- CUSTOMERS TABLOSUNA EKLENEN AGEGROUP alanÄ±nÄ± 20-35 yaÅŸ arasÄ±, 36-45 yaÅŸ arasÄ±, 55-65 yaÅŸ arasÄ± 
+--ve 65 yaÅŸ Ã¼stÃ¼ olarak gÃ¼ncelleyin.
 SELECT BIRHTDATE, YEAR(GETDATE())- YEAR(BIRHTDATE) AS FARK FROM CUSTOMERS 
 
 UPDATE CUSTOMERS SET AGEGROUP=
 	CASE
-		WHEN YEAR(GETDATE())-YEAR(BIRHTDATE) BETWEEN 20 AND 35 THEN '20-35 arasý'
-		WHEN YEAR(GETDATE())- YEAR(BIRHTDATE) BETWEEN 36 AND 45 THEN '36-45 arasý'
-		WHEN YEAR(GETDATE())- YEAR(BIRHTDATE) BETWEEN 46 AND 55 THEN '46-55 arasý'
-		WHEN YEAR(GETDATE())- YEAR(BIRHTDATE)> 55 THEN ' 65 üzeri' 
+		WHEN YEAR(GETDATE())-YEAR(BIRHTDATE) BETWEEN 20 AND 35 THEN '20-35 arasÄ±'
+		WHEN YEAR(GETDATE())- YEAR(BIRHTDATE) BETWEEN 36 AND 45 THEN '36-45 arasÄ±'
+		WHEN YEAR(GETDATE())- YEAR(BIRHTDATE) BETWEEN 46 AND 55 THEN '46-55 arasÄ±'
+		WHEN YEAR(GETDATE())- YEAR(BIRHTDATE)> 55 THEN ' 65 Ã¼zeri' 
 	END;
 SELECT *FROM CUSTOMERS
 ---0R-----------------------------------------------------------------------------
@@ -50,21 +50,21 @@ UPDATE CUSTOMERS SET AGEGROUP='20-35 yas'
 
 SELECT *FROM CUSTOMERS
 ---------------------------------------------------------------------------------------------------------------------------------------
---CUSTOMERS TABLOSUNDA 20-35 yaþ arasý, 36-45 yaþ arasý, 46-55 yaþ arasý,56-64 yaþ arasý ve 65 yaþ üstü kaç kiþi***************
+--CUSTOMERS TABLOSUNDA 20-35 yaÅŸ arasÄ±, 36-45 yaÅŸ arasÄ±, 46-55 yaÅŸ arasÄ±,56-64 yaÅŸ arasÄ± ve 65 yaÅŸ Ã¼stÃ¼ kaÃ§ kiÅŸi***************
 SELECT   CASE
-			WHEN DATEDIFF(YEAR,BIRHTDATE,GETDATE()) BETWEEN 20 AND 35 THEN '20-35 arasý'
-			WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) BETWEEN 36 AND 45 THEN '36-45 arasý'
-			WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) BETWEEN 46 AND 55 THEN '46-55 arasý'
-			WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) BETWEEN 56 AND 64 THEN '56-64 arasý'
-			WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) >65 THEN '65 ÜZERÝ'
+			WHEN DATEDIFF(YEAR,BIRHTDATE,GETDATE()) BETWEEN 20 AND 35 THEN '20-35 arasÄ±'
+			WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) BETWEEN 36 AND 45 THEN '36-45 arasÄ±'
+			WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) BETWEEN 46 AND 55 THEN '46-55 arasÄ±'
+			WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) BETWEEN 56 AND 64 THEN '56-64 arasÄ±'
+			WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) >65 THEN '65 ÃœZERÄ°'
 		END AS YAS_ARALIK,
 		COUNT(*) FROM CUSTOMERS CUS 
 	GROUP BY CASE
-					WHEN DATEDIFF(YEAR,BIRHTDATE,GETDATE()) BETWEEN 20 AND 35 THEN '20-35 arasý'
-					WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) BETWEEN 36 AND 45 THEN '36-45 arasý'
-					WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) BETWEEN 46 AND 55 THEN '46-55 arasý'
-					WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) BETWEEN 56 AND 64 THEN '56-64 arasý'
-					WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) >65 THEN '65 ÜZERÝ'
+					WHEN DATEDIFF(YEAR,BIRHTDATE,GETDATE()) BETWEEN 20 AND 35 THEN '20-35 arasÄ±'
+					WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) BETWEEN 36 AND 45 THEN '36-45 arasÄ±'
+					WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) BETWEEN 46 AND 55 THEN '46-55 arasÄ±'
+					WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) BETWEEN 56 AND 64 THEN '56-64 arasÄ±'
+					WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) >65 THEN '65 ÃœZERÄ°'
 			 END
 	ORDER BY YAS_ARALIK;
 -----OR----
@@ -72,47 +72,59 @@ SELECT   CASE
 SELECT YAS_ARALIK,COUNT(TMP.ID) FROM 
 (SELECT *,
 	CASE
-	  WHEN DATEDIFF(YEAR , BIRHTDATE,GETDATE()) BETWEEN 20 AND 35 THEN '20-35 arasý'
-	  WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) BETWEEN 36 AND 45 THEN '36-45 arasý'
-   	  WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) BETWEEN 46 AND 55 THEN '46-55 arasý'
-	  WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) BETWEEN 56 AND 64 THEN '56-64 arasý'
-	  WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) >65 THEN '65 ÜZERÝ'
+	  WHEN DATEDIFF(YEAR , BIRHTDATE,GETDATE()) BETWEEN 20 AND 35 THEN '20-35 arasÄ±'
+	  WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) BETWEEN 36 AND 45 THEN '36-45 arasÄ±'
+   	  WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) BETWEEN 46 AND 55 THEN '46-55 arasÄ±'
+	  WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) BETWEEN 56 AND 64 THEN '56-64 arasÄ±'
+	  WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) >65 THEN '65 ÃœZERÄ°'
 	END AS YAS_ARALIK
 FROM CUSTOMERS )TMP
 GROUP BY YAS_ARALIK ORDER BY YAS_ARALIK
+
+---OR----
+WITH TMP AS (SELECT *,
+	CASE
+	  WHEN DATEDIFF(YEAR , BIRHTDATE,GETDATE()) BETWEEN 20 AND 35 THEN '20-35 arasÄ±'
+	  WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) BETWEEN 36 AND 45 THEN '36-45 arasÄ±'
+   	  WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) BETWEEN 46 AND 55 THEN '46-55 arasÄ±'
+	  WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) BETWEEN 56 AND 64 THEN '56-64 arasÄ±'
+	  WHEN DATEDIFF(YEAR, BIRHTDATE, GETDATE()) >65 THEN '65 ÃœZERÄ°'
+	END AS YAS_ARALIK
+  FROM CUSTOMERS ) 
+SELECT YAS_ARALIK,COUNT(TMP.ID) FROM TMP  GROUP BY YAS_ARALIK ORDER BY YAS_ARALIK;
 -----------------------------------------------------------------------------------------------------------------------------------------
---Ýstanbulda yaþayýp ilçesi Kadýköy dýþýnda olanlarý listele
+--Ä°stanbulda yaÅŸayÄ±p ilÃ§esi KadÄ±kÃ¶y dÄ±ÅŸÄ±nda olanlarÄ± listele
 SELECT  COUNT(*) FROM CUSTOMERS CUS 
-INNER JOIN CITYS C ON CUS.CITYID= C.ID WHERE C.CITY='ÝSTANBUL' AND CUS.DISTRICTID !=(SELECT ID FROM DISTRICTS D WHERE D.DISTRICT='KADIKÖY') ;
+INNER JOIN CITYS C ON CUS.CITYID= C.ID WHERE C.CITY='Ä°STANBUL' AND CUS.DISTRICTID !=(SELECT ID FROM DISTRICTS D WHERE D.DISTRICT='KADIKÃ–Y') ;
 
 ---OR----
 SELECT COUNT(*) FROM CUSTOMERS CUS
 INNER JOIN CITYS C ON CUS.CITYID= C.ID
-INNER JOIN DISTRICTS D ON CUS.DISTRICTID=D.ID WHERE C.CITY= 'ÝSTANBUL' AND D.DISTRICT <> 'KADIKÖY';
+INNER JOIN DISTRICTS D ON CUS.DISTRICTID=D.ID WHERE C.CITY= 'Ä°STANBUL' AND D.DISTRICT <> 'KADIKÃ–Y';
 -----------------------------------------------------------------------------------------------------------------------------------------
----Müþterilerimizin telefon numaralarýnýn operatör bilgisini getirmek istiyoruz.TELNR1 VE TELNR2 alanlarýnýn 
---yanýna operatör numarasýný (532)(505) gibi getirme
+---MÃ¼ÅŸterilerimizin telefon numaralarÄ±nÄ±n operatÃ¶r bilgisini getirmek istiyoruz.TELNR1 VE TELNR2 alanlarÄ±nÄ±n 
+--yanÄ±na operatÃ¶r numarasÄ±nÄ± (532)(505) gibi getirme
 SELECT *FROM CUSTOMERS
 SELECT CUSTOMERNAME, TELNR1,TELNR2, 
 SUBSTRING(TELNR1,1,5) AS OPERATOR1, 
 SUBSTRING(TELNR2,1,5 ) AS OPERATOR2 
 FROM CUSTOMERS
 -----------------------------------------------------------------------------------------------------------------------------------------
---Her ilde en cok müþteriye sahip olduðumuz ilçeleri müþteri sayýsýna göre 
---çoktan aza doðru sýralý þekilde getirme.
+--Her ilde en cok mÃ¼ÅŸteriye sahip olduÄŸumuz ilÃ§eleri mÃ¼ÅŸteri sayÄ±sÄ±na gÃ¶re 
+--Ã§oktan aza doÄŸru sÄ±ralÄ± ÅŸekilde getirme.
 
-SELECT C.CITY AS ÞEHÝR,D.DISTRICT AS ÝLÇE, COUNT(CUS.TCNUMBER) AS MÜSTERÝSAYÝSÝ FROM CUSTOMERS CUS
+SELECT C.CITY AS ÅžEHÄ°R,D.DISTRICT AS Ä°LÃ‡E, COUNT(CUS.TCNUMBER) AS MÃœSTERÄ°SAYÄ°SÄ° FROM CUSTOMERS CUS
 INNER JOIN CITYS C ON CUS.CITYID=C.ID 
 INNER JOIN  DISTRICTS D ON D.ID=CUS.DISTRICTID GROUP BY D.DISTRICT,C.CITY ;
 
 -----------------------------------------------------------------------------------------------------------------------------------------
---MÜÞTERÝLERÝN DOGUM GÜNLERÝNÝ  HAFTANIN GÜNÜ OLARAK LÝSTELEME
+--MÃœÅžTERÄ°LERÄ°N DOGUM GÃœNLERÄ°NÄ°  HAFTANIN GÃœNÃœ OLARAK LÄ°STELEME
 SELECT CUSTOMERNAME,
 	CASE DATENAME(WEEKDAY,BIRHTDATE)
 		WHEN 'Monday' THEN 'Pazartesi'
-		WHEN 'Tuesday' THEN 'Salý'
-		WHEN 'Wednesday' THEN 'Çarþamba'
-		WHEN 'Thursday' THEN 'Perþembe'
+		WHEN 'Tuesday' THEN 'SalÄ±'
+		WHEN 'Wednesday' THEN 'Ã‡arÅŸamba'
+		WHEN 'Thursday' THEN 'PerÅŸembe'
 		WHEN 'Friday' THEN 'Cuma'
 		WHEN 'Saturday' THEN 'Cumartesi'
 		WHEN 'Sunday' THEN 'Pazar'
@@ -120,6 +132,6 @@ SELECT CUSTOMERNAME,
 	End
 FROM CUSTOMERS
 -----------------------------------------------------------------------------------------------------------------------------------------
---DOGUM GÜNÜ BUGÜN OLAN MÜÞTERÝLERÝ LÝSTELEYÝNÝZ
+--DOGUM GÃœNÃœ BUGÃœN OLAN MÃœÅžTERÄ°LERÄ° LÄ°STELEYÄ°NÄ°Z
 SELECT* FROM CUSTOMERS WHERE DAY(BIRHTDATE)= DAY(GETDATE()) AND MONTH(BIRHTDATE)= MONTH(GETDATE()); 
 -----------------------------------------------------------------------------------------------------------------------------------------
